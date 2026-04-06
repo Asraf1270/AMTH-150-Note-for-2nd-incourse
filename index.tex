@@ -1,0 +1,1015 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in, top=0.8in, bottom=0.8in}
+
+% Packages for design and math
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{mathtools}
+\usepackage{physics}
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\usepackage{tikz}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{colortbl}
+\usepackage{multirow}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+% Color definitions
+\definecolor{primary}{RGB}{25, 55, 95}
+\definecolor{secondary}{RGB}{70, 130, 200}
+\definecolor{accent}{RGB}{220, 70, 50}
+\definecolor{formula}{RGB}{200, 80, 60}
+\definecolor{mathematica}{RGB}{50, 100, 80}
+\definecolor{lightbg}{RGB}{240, 248, 255}
+
+% Custom tcolorbox styles
+\newtcolorbox{definitionbox}[1][]{
+    colback=lightbg,
+    colframe=primary,
+    coltitle=white,
+    fonttitle=\bfseries\large,
+    title={#1},
+    sharp corners,
+    boxrule=1.5pt,
+    left=10pt,
+    right=10pt,
+    top=8pt,
+    bottom=8pt
+}
+
+\newtcolorbox{formulabox}[1][]{
+    colback=yellow!15,
+    colframe=formula,
+    sharp corners,
+    boxrule=1pt,
+    left=8pt,
+    right=8pt,
+    top=5pt,
+    bottom=5pt,
+    #1
+}
+
+\newtcolorbox{mathematicabox}{
+    colback=gray!10,
+    colframe=mathematica,
+    sharp corners,
+    boxrule=1pt,
+    fonttitle=\bfseries,
+    title=Wolfram Mathematica 13 Implementation,
+    left=8pt,
+    right=8pt,
+    top=5pt,
+    bottom=5pt
+}
+
+\newtcolorbox{tipbox}{
+    colback=green!10,
+    colframe=green!50!black,
+    sharp corners,
+    boxrule=1pt,
+    left=8pt,
+    right=8pt,
+    top=5pt,
+    bottom=5pt
+}
+
+% Header and footer
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textcolor{primary}{\textbf{Linear Algebra \& Calculus}}}
+\fancyhead[R]{\textcolor{primary}{\textbf{Exam Preparation Notes}}}
+\fancyfoot[C]{\thepage}
+\fancyfoot[R]{\textcolor{gray}{Wolfram Mathematica 13 Lab}}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}
+    {\color{primary}\normalfont\Large\bfseries}
+    {\color{primary}\thesection}{1em}{}
+\titleformat{\subsection}
+    {\color{secondary}\normalfont\large\bfseries}
+    {\color{secondary}\thesubsection}{1em}{}
+
+% Math operators
+\providecommand{\rank}{\operatorname{rank}}
+\providecommand{\nullity}{\operatorname{nullity}}
+\providecommand{\proj}{\operatorname{proj}}
+\providecommand{\comp}{\operatorname{comp}}
+\providecommand{\tr}{\operatorname{tr}}
+
+% Document
+\begin{document}
+
+% Title Page
+\begin{titlepage}
+    \centering
+    \vspace*{2cm}
+    
+    {\Huge\bfseries\color{primary} Complete Exam Preparation Notes}
+    
+    \vspace{0.5cm}
+    {\Large\bfseries\color{secondary} Linear Algebra \& Calculus}
+    
+    \vspace{0.5cm}
+    {\large with Wolfram Mathematica 13 Implementation}
+    
+    \vspace{2cm}
+    
+    \begin{tcolorbox}[colback=lightbg, colframe=primary, sharp corners, width=0.8\textwidth, center]
+        \centering
+        \textbf{Covering Assignments:}\\
+        \vspace{0.3cm}
+        1B — Complex Numbers \& Series \\
+        2B — Definite Integrals \& Area \\
+        3B — Lines, Planes \& Vectors \\
+        4A — Matrix Operations \& Linear Systems \\
+        4B — Linear Independence \& Eigenvalues
+    \end{tcolorbox}
+    
+    \vspace{2cm}
+    
+    \textcolor{gray}{Department of Applied Mathematics}\\
+    \textcolor{gray}{University of Dhaka}
+    
+    \vfill
+    \textcolor{gray}{\today}
+\end{titlepage}
+
+% Table of Contents
+\tableofcontents
+\newpage
+
+\section*{How to Use This Note (Wolfram Mathematica 13)}
+\addcontentsline{toc}{section}{How to Use This Note (Wolfram Mathematica 13)}
+
+\begin{definitionbox}[Recommended Study Flow]
+    Each topic is organized in a practical exam-ready sequence:
+    \begin{enumerate}
+        \item \textbf{Core explanation:} understand the concept and conditions.
+        \item \textbf{Formula focus:} memorize the key equation(s).
+        \item \textbf{Worked example:} follow the solved model problem.
+        \item \textbf{Mathematica 13 code:} verify and automate the calculation.
+        \item \textbf{Quick review:} use the Master Formula Sheet and tips section.
+    \end{enumerate}
+\end{definitionbox}
+
+\begin{tipbox}
+    \textbf{Important for Mathematica 13:}
+    \begin{itemize}
+        \item Use exact arithmetic first (fractions/symbolic forms), then apply \texttt{N[...]}.
+        \item For linear algebra, use built-ins such as \texttt{Det}, \texttt{Inverse}, \texttt{LinearSolve}, and \texttt{Eigensystem}.
+        \item Always cross-check symbolic output with a numerical or graphical check when possible.
+    \end{itemize}
+\end{tipbox}
+\newpage
+
+% ============================================================
+% SECTION 1: ASSIGNMENT 1B - COMPLEX NUMBERS & SERIES
+% ============================================================
+\section{Assignment 1B: Complex Numbers \& Series}
+
+\begin{definitionbox}[Learning Goals]
+    Convert complex inequalities to geometric regions, estimate possible real roots using Descartes' rule,
+    evaluate finite/infinite-style series patterns, compare AM--GM--HM correctly, and implement all methods in Mathematica 13.
+\end{definitionbox}
+
+\subsection{Complex Inequalities}
+
+\begin{definitionbox}[Key Concept]
+    For a complex number \(z = x + iy\), the modulus is defined as:
+    \[ |z| = \sqrt{x^2 + y^2} \]
+    
+    To convert a complex inequality to real form:
+    \begin{enumerate}
+        \item Substitute \(z = x + iy\)
+        \item Use \( \left| \frac{z - a}{z - b} \right| = \frac{\sqrt{(x-a)^2 + y^2}}{\sqrt{(x-b)^2 + y^2}} \)
+        \item Square both sides (both sides positive)
+        \item Simplify to get circle/region equation
+    \end{enumerate}
+\end{definitionbox}
+
+\begin{formulabox}
+    \textbf{Example:} \( \left| \frac{z-3}{z+3} \right| < 2 \)
+    
+    \[
+    \frac{\sqrt{(x-3)^2 + y^2}}{\sqrt{(x+3)^2 + y^2}} < 2
+    \implies (x+5)^2 + y^2 > 16
+    \]
+    
+    \textbf{Result:} Region outside circle centered at \((-5,0)\) with radius \(4\).
+\end{formulabox}
+
+\begin{mathematicabox}
+    \begin{lstlisting}[language=Mathematica, basicstyle=\ttfamily\small]
+(* Solve complex inequality *)
+ineq = Abs[(z - 3)/(z + 3)] < 2;
+solution = Reduce[ineq, z, Complexes];
+Simplify[solution]
+
+(* Plot the region *)
+RegionPlot[(x + 5)^2 + y^2 > 16, {x, -12, 2}, {y, -6, 6},
+  PlotLabel -> "|(z-3)/(z+3)| < 2",
+  AxesLabel -> {"Re(z)", "Im(z)"}]
+    \end{lstlisting}
+\end{mathematicabox}
+
+\subsection{Descartes' Rule of Signs}
+
+\begin{definitionbox}[Descartes' Rule of Signs]
+    For a polynomial \(f(x)\) with real coefficients:
+    \begin{itemize}
+        \item \textbf{Positive real roots:} Number equals sign changes in \(f(x)\) (or less by an even number)
+        \item \textbf{Negative real roots:} Number equals sign changes in \(f(-x)\) (or less by an even number)
+    \end{itemize}
+\end{definitionbox}
+
+\begin{formulabox}
+    \textbf{Example:} \(f(x) = x^9 + 5x^8 - x^3 + 7x + 2\)
+    
+    \begin{tabular}{ll}
+    \(f(x)\) signs: & \(+, +, -, +, +\) → 2 sign changes \\
+    \(f(-x)\) signs: & \(-, +, +, -, +\) → 3 sign changes \\
+    \hline
+    Positive real roots: & 0 or 2 \\
+    Negative real roots: & 1 or 3 \\
+    \end{tabular}
+\end{formulabox}
+
+\begin{mathematicabox}
+    \begin{lstlisting}[language=Mathematica, basicstyle=\ttfamily\small]
+p[x_] := x^9 + 5x^8 - x^3 + 7x + 2;
+
+(* Count sign changes *)
+coeff = CoefficientList[p[x], x];
+signChanges = Count[Differences[Sign[coeff]], 2] + 
+              Count[Differences[Sign[coeff]], -2];
+
+(* Find actual roots *)
+roots = NSolve[p[x] == 0, x];
+realRoots = Select[roots, Im[#[[1,2]]] == 0 &];
+    \end{lstlisting}
+\end{mathematicabox}
+
+\subsection{Series Summation Using Loops}
+
+\begin{definitionbox}[Loop Structures in Mathematica]
+    \begin{itemize}
+        \item \textbf{Do loop:} \texttt{Do[expression, \{i, imin, imax\}]}
+        \item \textbf{For loop:} \texttt{For[start, test, increment, body]}
+        \item \textbf{While loop:} \texttt{While[condition, body]}
+    \end{itemize}
+\end{definitionbox}
+
+\begin{formulabox}
+    \textbf{Series:} \( \displaystyle \frac{1}{3\cdot4\cdot5} + \frac{1}{4\cdot5\cdot6} + \frac{1}{5\cdot6\cdot7} + \cdots \)
+    
+    General term: \( a_k = \frac{1}{k(k+1)(k+2)} \), starting at \(k=3\)
+    
+    Telescoping form: \( a_k = \frac{1}{2}\left[\frac{1}{k(k+1)} - \frac{1}{(k+1)(k+2)}\right] \)
+\end{formulabox}
+
+\begin{mathematicabox}
+    \begin{lstlisting}[language=Mathematica, basicstyle=\ttfamily\small]
+(* Do loop *)
+sum = 0;
+Do[sum += 1/(k*(k+1)*(k+2)), {k, 3, 102}]
+
+(* For loop *)
+sum = 0;
+For[k = 3, k <= 102, k++, 
+  sum += 1/(k*(k+1)*(k+2))]
+
+(* Built-in Sum *)
+Sum[1/(k*(k+1)*(k+2)), {k, 3, 102}]
+
+(* Telescoping sum exact value *)
+exact = 1/2*(1/(3*4) - 1/(103*104))
+    \end{lstlisting}
+\end{mathematicabox}
+
+\subsection{Means: AM, GM, HM}
+
+\begin{definitionbox}[Three Classical Means]
+    For positive numbers \(x_1, x_2, \ldots, x_n\):
+    
+    \begin{align*}
+    \text{Arithmetic Mean (AM)} &= \frac{1}{n}\sum_{i=1}^n x_i \\
+    \text{Geometric Mean (GM)} &= \left(\prod_{i=1}^n x_i\right)^{1/n} \\
+    \text{Harmonic Mean (HM)} &= \frac{n}{\sum_{i=1}^n \frac{1}{x_i}}
+    \end{align*}
+    
+    \textbf{AM–GM Inequality:} \(AM \geq GM \geq HM\) (with equality iff all numbers equal)
+\end{definitionbox}
+
+\begin{mathematicabox}
+    \begin{lstlisting}[language=Mathematica, basicstyle=\ttfamily\small]
+(* Generate 15 random integers *)
+randomList = RandomInteger[{1, 20}, 15];
+
+(* Calculate means *)
+AM = Mean[randomList];
+GM = (Product[randomList[[i]], {i,1,15}])^(1/15);
+HM = 15 / Sum[1/randomList[[i]], {i,1,15}];
+
+(* Check inequality *)
+AM >= GM && GM >= HM
+    \end{lstlisting}
+\end{mathematicabox}
+
+\subsection{Voting Theory Methods}
+
+\begin{definitionbox}[Voting Methods]
+    \begin{tabular}{|p{3cm}|p{10cm}|}
+        \hline
+        \textbf{Method} & \textbf{Description} \\
+        \hline
+        Borda Count & Points assigned by rank (4 for 1st, 3 for 2nd, 2 for 3rd, 1 for 4th) \\
+        Plurality & Candidate with most first-choice votes wins \\
+        Plurality-with-Elimination & Eliminate lowest, redistribute votes \\
+        Pairwise Comparison & Each pair compared head-to-head \\
+        \hline
+    \end{tabular}
+\end{definitionbox}
+
+\begin{formulabox}
+    \textbf{Mini Example (Borda Count):} Suppose 3 candidates \(A,B,C\) and 10 voters.
+    If first/second/third place points are \(3,2,1\), then total score is
+    \[\text{Score}(X)=3\cdot n_1(X)+2\cdot n_2(X)+1\cdot n_3(X)\]
+    Candidate with highest score wins.
+\end{formulabox}
+
+\begin{mathematicabox}
+    \begin{lstlisting}[language=Mathematica, basicstyle=\ttfamily\small]
+(* Borda Count demo: columns = rank positions for each voter block *)
+candidates = {"A", "B", "C"};
+points = {3, 2, 1};
+
+(* Example preference blocks and voter counts *)
+ballots = {{"A", "B", "C"}, {"B", "C", "A"}, {"C", "A", "B"}};
+counts = {4, 3, 3};
+
+scores = AssociationThread[candidates -> ConstantArray[0, Length[candidates]]];
+Do[
+  Do[
+    scores[ballots[[j, r]]] += points[[r]]*counts[[j]],
+    {r, 1, Length[points]}
+  ],
+  {j, 1, Length[ballots]}
+];
+
+scores
+    \end{lstlisting}
+\end{mathematicabox}
+
+% ============================================================
+% SECTION 2: ASSIGNMENT 2B - INTEGRALS & AREA
+% ============================================================
+\section{Assignment 2B: Definite Integrals \& Area}
+
+\begin{definitionbox}[Learning Goals]
+    Compute definite integrals geometrically and analytically, use Riemann sums, find area between curves,
+    evaluate average values, and solve motion/volume/arc-length problems with Mathematica 13.
+\end{definitionbox}
+
+\subsection{Definite Integrals and Geometric Areas}
+
+\begin{definitionbox}[Fundamental Theorem of Calculus]
+    \[ \int_a^b f(x)\,dx = F(b) - F(a) \quad \text{where } F'(x) = f(x) \]
+\end{definitionbox}
+
+\begin{formulabox}
+    \textbf{Common Geometric Areas:}
+    \begin{align*}
+    \text{Rectangle:} &\quad \int_a^b c\,dx = c(b-a) \\
+    \text{Triangle:} &\quad \int_a^b (mx + c)\,dx = \frac{1}{2}(b-a)(f(a)+f(b)) \\
+    \text{Circle:} &\quad \int_0^r \sqrt{r^2 - x^2}\,dx = \frac{\pi r^2}{4}
+    \end{align*}
+\end{formulabox}
+
+\begin{mathematicabox}
+    \begin{lstlisting}[language=Mathematica, basicstyle=\ttfamily\small]
+(* Definite integrals *)
+Integrate[2, {x, 1, 4}]           (* Rectangle: 3*2=6 *)
+Integrate[x+2, {x, -1, 2}]        (* Trapezoid *)
+Integrate[Sqrt[1-x^2], {x, 0, 1}] (* Quarter circle: pi/4 *)
+
+(* Numerical approximation *)
+NIntegrate[Sqrt[1-x^2], {x, 0, 1}]
+    \end{lstlisting}
+\end{mathematicabox}
+
+\subsection{Riemann Sums}
+
+\begin{definitionbox}[Riemann Sum]
+    \[ \int_a^b f(x)\,dx \approx \sum_{i=1}^n f(x_i^*) \Delta x \]
+    
+    where \(\Delta x = \frac{b-a}{n}\) and:
+    \begin{itemize}
+        \item Left endpoint: \(x_i^* = a + (i-1)\Delta x\)
+        \item Right endpoint: \(x_i^* = a + i\Delta x\)
+        \item Midpoint: \(x_i^* = a + (i-\frac{1}{2})\Delta x\)
+    \end{itemize}
+\end{definitionbox}
+
+\begin{mathematicabox}
+    \begin{lstlisting}[language=Mathematica, basicstyle=\ttfamily\small]
+f[x_] := 9 - x^2;
+a = 0; b = 3; n = 10;
+deltaX = (b - a)/n;
+
+(* Left sum *)
+leftSum = Sum[f[a + (i-1)*deltaX]*deltaX, {i, 1, n}];
+
+(* Right sum *)
+rightSum = Sum[f[a + i*deltaX]*deltaX, {i, 1, n}];
+
+(* Midpoint sum *)
+midSum = Sum[f[a + (i-0.5)*deltaX]*deltaX, {i, 1, n}];
+
+(* Exact value *)
+exact = Integrate[f[x], {x, a, b}];
+    \end{lstlisting}
+\end{mathematicabox}
+
+\subsection{Area Between Curves}
+
+\begin{formulabox}
+    \[ \text{Area} = \int_a^b |f(x) - g(x)|\,dx \]
+    
+    where \(a\) and \(b\) are intersection points of \(f\) and \(g\).
+\end{formulabox}
+
+\begin{mathematicabox}
+    \begin{lstlisting}[language=Mathematica, basicstyle=\ttfamily\small]
+(* Area between y=x^2 and y=2x+4 *)
+f[x_] := x^2;
+g[x_] := 2x + 4;
+
+intersections = Solve[f[x] == g[x], x];
+area = Integrate[g[x] - f[x], {x, -2, 4}]
+(* Result: 36 *)
+
+Plot[{f[x], g[x]}, {x, -3, 5}, Filling -> {1 -> {2}}]
+    \end{lstlisting}
+\end{mathematicabox}
+
+\subsection{Average Value of a Function}
+
+\begin{formulabox}
+    \[ f_{\text{avg}} = \frac{1}{b-a} \int_a^b f(x)\,dx \]
+\end{formulabox}
+
+\begin{mathematicabox}
+    \begin{lstlisting}[language=Mathematica, basicstyle=\ttfamily\small]
+(* Drug concentration problem *)
+C[t_] := (0.25 t)/(t^2 + 4);
+time = 3 + 17/60;  (* 3 hours 17 minutes *)
+
+avgConcentration = (1/time) * Integrate[C[t], {t, 0, time}];
+N[avgConcentration]
+    \end{lstlisting}
+\end{mathematicabox}
+
+\subsection{Free Fall Motion}
+
+\begin{formulabox}
+    \begin{align*}
+    s(t) &= s_0 + v_0 t - \frac{1}{2}gt^2 \\
+    v(t) &= v_0 - gt
+    \end{align*}
+    
+    where \(g = 32\ \text{ft/s}^2\) or \(9.8\ \text{m/s}^2\).
+\end{formulabox}
+
+\begin{mathematicabox}
+    \begin{lstlisting}[language=Mathematica, basicstyle=\ttfamily\small]
+(* Object dropped from 1276 ft *)
+s[t_] := 1276 - 16t^2;
+timeToGround = Solve[s[t] == 0, t]  (* t = Sqrt[1276/16] *)
+impactVelocity = -32 * timeToGround[[2,1,2]]
+    \end{lstlisting}
+\end{mathematicabox}
+
+\subsection{Volume of Solids of Revolution}
+
+\begin{definitionbox}[Volume Methods]
+    \begin{tabular}{|p{4cm}|p{10cm}|}
+        \hline
+        \textbf{Method} & \textbf{Formula} \\
+        \hline
+        Disk (x-axis) & \(V = \pi \int_a^b [R(x)]^2\,dx\) \\
+        Washer & \(V = \pi \int_a^b ([R(x)]^2 - [r(x)]^2)\,dx\) \\
+        Shell (y-axis) & \(V = 2\pi \int_a^b x f(x)\,dx\) \\
+        \hline
+    \end{tabular}
+\end{definitionbox}
+
+\begin{mathematicabox}
+    \begin{lstlisting}[language=Mathematica, basicstyle=\ttfamily\small]
+(* Volume: y=Sqrt[x] from x=1 to 6 about x-axis *)
+f[x_] := Sqrt[x];
+volume = pi * Integrate[f[x]^2, {x, 1, 6}]
+(* = 35pi/2 *)
+
+(* Shell method: y=x^2 from 0 to 2 about y=-1 *)
+volumeShell = 2pi * Integrate[(x^2+1)^2 - 1^2, {x, 0, 2}]
+    \end{lstlisting}
+\end{mathematicabox}
+
+\subsection{Arc Length and Surface Area}
+
+\begin{formulabox}
+    \textbf{Arc Length:}
+    \[ L = \int_a^b \sqrt{1 + \left(\frac{dy}{dx}\right)^2}\,dx \]
+    
+    \textbf{Surface Area (about x-axis):}
+    \[ S = 2\pi \int_a^b f(x) \sqrt{1 + [f'(x)]^2}\,dx \]
+    
+    \textbf{Parametric Arc Length:}
+    \[ L = \int_a^b \sqrt{\left(\frac{dx}{dt}\right)^2 + \left(\frac{dy}{dt}\right)^2}\,dt \]
+\end{formulabox}
+
+% ============================================================
+% SECTION 3: ASSIGNMENT 3B - LINES, PLANES & VECTORS
+% ============================================================
+\section{Assignment 3B: Lines, Planes \& Vectors}
+
+\begin{definitionbox}[Learning Goals]
+    Write equations of lines and planes, compute distances and angles, apply dot/cross products,
+    and solve 3D geometry questions efficiently in Mathematica 13.
+\end{definitionbox}
+
+\subsection{Lines in 3D Space}
+
+\begin{definitionbox}[Parametric Equation of a Line]
+    \[ \mathbf{r}(t) = \mathbf{r}_0 + t\mathbf{v} \]
+    
+    where \(\mathbf{r}_0\) is a point on the line and \(\mathbf{v}\) is the direction vector.
+\end{definitionbox}
+
+\begin{formulabox}
+    \textbf{Distance from point to line:}
+    \[ d = \frac{|(\mathbf{P} - \mathbf{Q}) \times \mathbf{v}|}{|\mathbf{v}|} \]
+    
+    \textbf{Angle between lines:}
+    \[ \cos\theta = \frac{|\mathbf{v}_1 \cdot \mathbf{v}_2|}{|\mathbf{v}_1||\mathbf{v}_2|} \]
+    
+    \textbf{Skew lines distance:}
+    \[ d = \frac{|(\mathbf{P}_2 - \mathbf{P}_1) \cdot (\mathbf{v}_1 \times \mathbf{v}_2)|}{|\mathbf{v}_1 \times \mathbf{v}_2|} \]
+\end{formulabox}
+
+\begin{mathematicabox}
+    \begin{lstlisting}[language=Mathematica, basicstyle=\ttfamily\small]
+(* Parametric line *)
+line = p0 + t*v
+
+(* Distance point to line *)
+distance = Norm[Cross[P-Q, v]] / Norm[v]
+
+(* Angle between lines *)
+cosTheta = Abs[v1.v2]/(Norm[v1]*Norm[v2])
+
+(* Skew lines distance *)
+dist = Abs[(p2-p1).Cross[v1,v2]] / Norm[Cross[v1,v2]]
+    \end{lstlisting}
+\end{mathematicabox}
+
+\subsection{Planes in 3D Space}
+
+\begin{definitionbox}[Equation of a Plane]
+    \[ \mathbf{n} \cdot (\mathbf{r} - \mathbf{r}_0) = 0 \quad \text{or} \quad Ax + By + Cz + D = 0 \]
+    
+    where \(\mathbf{n} = (A,B,C)\) is the normal vector.
+\end{definitionbox}
+
+\begin{formulabox}
+    \textbf{Distance from point to plane:}
+    \[ d = \frac{|Ax_0 + By_0 + Cz_0 + D|}{\sqrt{A^2 + B^2 + C^2}} \]
+    
+    \textbf{Angle between planes:}
+    \[ \cos\theta = \frac{|\mathbf{n}_1 \cdot \mathbf{n}_2|}{|\mathbf{n}_1||\mathbf{n}_2|} \]
+    
+    \textbf{Plane from 3 points:}
+    \[ \mathbf{n} = (\mathbf{Q}-\mathbf{P}) \times (\mathbf{R}-\mathbf{P}) \]
+\end{formulabox}
+
+\begin{mathematicabox}
+    \begin{lstlisting}[language=Mathematica, basicstyle=\ttfamily\small]
+(* Normal from 3 points *)
+n = Cross[Q-P, R-P];
+
+(* Plane equation *)
+planeEq = n.({x,y,z} - P) == 0
+
+(* Distance point to plane *)
+dist = Abs[A*x0+B*y0+C*z0+D]/Sqrt[A^2+B^2+C^2]
+    \end{lstlisting}
+\end{mathematicabox}
+
+\subsection{Vector Operations}
+
+\begin{definitionbox}[Vector Products]
+    \begin{align*}
+    \text{Dot product:} &\quad \mathbf{a} \cdot \mathbf{b} = a_1b_1 + a_2b_2 + a_3b_3 \\
+    \text{Cross product:} &\quad \mathbf{a} \times \mathbf{b} = \begin{vmatrix}
+    \mathbf{i} & \mathbf{j} & \mathbf{k} \\
+    a_1 & a_2 & a_3 \\
+    b_1 & b_2 & b_3
+    \end{vmatrix} \\
+    \text{Scalar triple product:} &\quad \mathbf{a} \cdot (\mathbf{b} \times \mathbf{c})
+    \end{align*}
+\end{definitionbox}
+
+\begin{formulabox}
+    \textbf{Applications:}
+    \begin{itemize}
+        \item Area of triangle: \(\frac{1}{2}|\mathbf{AB} \times \mathbf{AC}|\)
+        \item Volume of parallelepiped: \(|\mathbf{a} \cdot (\mathbf{b} \times \mathbf{c})|\)
+        \item Work: \(W = \mathbf{F} \cdot \mathbf{d}\)
+        \item Torque: \(\boldsymbol{\tau} = \mathbf{r} \times \mathbf{F}\)
+    \end{itemize}
+\end{formulabox}
+
+\begin{mathematicabox}
+    \begin{lstlisting}[language=Mathematica, basicstyle=\ttfamily\small]
+(* Vector operations *)
+a = {a1, a2, a3};
+b = {b1, b2, b3};
+dot = a.b
+cross = Cross[a, b]
+mag = Norm[a]
+unit = a/Norm[a]
+
+(* Area of triangle *)
+area = Norm[Cross[B-A, C-A]]/2
+
+(* Volume of parallelepiped *)
+vol = Abs[Dot[a, Cross[b, c]]]
+    \end{lstlisting}
+\end{mathematicabox}
+
+% ============================================================
+% SECTION 4: ASSIGNMENT 4A - MATRIX OPERATIONS
+% ============================================================
+\section{Assignment 4A: Matrix Operations \& Linear Systems}
+
+\begin{definitionbox}[Learning Goals]
+    Perform matrix operations correctly, build special matrices, solve linear systems,
+    and interpret applied models such as network flow using Mathematica 13 commands.
+\end{definitionbox}
+
+\subsection{Matrix Operations}
+
+\begin{definitionbox}[Basic Matrix Operations]
+    \begin{tabular}{|p{3cm}|p{10cm}|}
+        \hline
+        \textbf{Operation} & \textbf{Mathematica Syntax} \\
+        \hline
+        Addition & \texttt{A + B} \\
+        Subtraction & \texttt{A - B} \\
+        Scalar multiplication & \texttt{k * A} \\
+        Matrix multiplication & \texttt{A . B} (dot, not *) \\
+        Transpose & \texttt{Transpose[A]} \\
+        Inverse & \texttt{Inverse[A]} \\
+        Determinant & \texttt{Det[A]} \\
+        Trace & \texttt{Tr[A]} \\
+        \hline
+    \end{tabular}
+\end{definitionbox}
+
+\begin{tipbox}
+    \textbf{Important:} Matrix multiplication uses \texttt{.} (dot), not \texttt{*} (star). 
+    The star performs element-wise multiplication.
+\end{tipbox}
+
+\subsection{Constructing Special Matrices}
+
+\begin{mathematicabox}
+    \begin{lstlisting}[language=Mathematica, basicstyle=\ttfamily\small]
+(* Tridiagonal matrix *)
+n = 5;
+tridiag = Table[
+  Which[i==j, 2, i==j-1, 4, i==j+1, 3, True, 0],
+  {i,n}, {j,n}
+];
+
+(* Using DiagonalMatrix *)
+tridiag = DiagonalMatrix[ConstantArray[2,n]] + 
+          DiagonalMatrix[ConstantArray[4,n-1], 1] + 
+          DiagonalMatrix[ConstantArray[3,n-1], -1];
+
+(* Submatrix: rows {1,3,4}, columns {3,4} *)
+sub = tridiag[[{1,3,4}, {3,4}]];
+    \end{lstlisting}
+\end{mathematicabox}
+
+\subsection{Solving Linear Systems}
+
+\begin{definitionbox}[Methods for Solving \(A\mathbf{x} = \mathbf{b}\)]
+    \begin{enumerate}
+        \item \textbf{Inverse method:} \(\mathbf{x} = A^{-1}\mathbf{b}\)
+        \item \textbf{LinearSolve:} \texttt{LinearSolve[A, b]}
+        \item \textbf{Cramer's Rule:} \(x_i = \frac{\det(A_i)}{\det(A)}\)
+        \item \textbf{Row Reduction:} \texttt{RowReduce[Join[A, Transpose[\{b\}], 2]]}
+        \item \textbf{LU Decomposition:} \(A = LU\)
+    \end{enumerate}
+\end{definitionbox}
+
+\begin{mathematicabox}
+    \begin{lstlisting}[language=Mathematica, basicstyle=\ttfamily\small]
+A = {{1,1,2},{2,4,-3},{3,6,-5}};
+b = {9,1,0};
+
+(* Method 1: Inverse *)
+x = Inverse[A] . b
+
+(* Method 2: LinearSolve (recommended) *)
+x = LinearSolve[A, b]
+
+(* Method 3: Cramer's Rule *)
+detA = Det[A];
+x1 = Det[ReplacePart[A, 1 -> b]]/detA;
+
+(* Method 4: LU Decomposition *)
+{lu, p, c} = LUDecomposition[A];
+x = LinearSolve[lu, b, p, c];
+    \end{lstlisting}
+\end{mathematicabox}
+
+\subsection{Network Flow Problems}
+
+\begin{definitionbox}[Kirchhoff's Current Law]
+    At each junction: \textbf{Flow in = Flow out}
+    
+    This creates a system of linear equations.
+\end{definitionbox}
+
+% ============================================================
+% SECTION 5: ASSIGNMENT 4B - LINEAR INDEPENDENCE & EIGENVALUES
+% ============================================================
+\section{Assignment 4B: Linear Independence \& Eigenvalues}
+
+\begin{definitionbox}[Learning Goals]
+    Test linear independence, find bases/coordinates, apply rank-nullity,
+    compute eigenvalues/eigenvectors, and verify diagonalization in Mathematica 13.
+\end{definitionbox}
+
+\subsection{Linear Independence}
+
+\begin{definitionbox}[Linear Independence]
+    Vectors \(\mathbf{v}_1, \mathbf{v}_2, \ldots, \mathbf{v}_n\) are linearly independent if:
+    \[ c_1\mathbf{v}_1 + c_2\mathbf{v}_2 + \cdots + c_n\mathbf{v}_n = \mathbf{0} \implies c_1 = c_2 = \cdots = c_n = 0 \]
+    
+    \textbf{Test:} Form matrix with vectors as columns. If \(\det \neq 0\) (or rank = n), they are independent.
+\end{definitionbox}
+
+\begin{mathematicabox}
+    \begin{lstlisting}[language=Mathematica, basicstyle=\ttfamily\small]
+(* Test linear independence *)
+vectors = {{1,-1,2}, {1,-2,1}, {1,1,4}};
+matrix = Transpose[vectors];
+rank = MatrixRank[matrix];
+isIndependent = (rank == 3)
+
+(* Alternative: Check determinant *)
+Det[matrix] != 0
+
+(* For polynomials: convert to coefficient vectors *)
+p1 = {0, -1, 0, 1};  (* x^3 - x *)
+p2 = {4, 0, 2, 0};   (* 2x^2 + 4 *)
+p3 = {6, 2, 3, -2};  (* -2x^3+3x^2+2x+6 *)
+    \end{lstlisting}
+\end{mathematicabox}
+
+\subsection{Basis and Coordinate Vectors}
+
+\begin{definitionbox}[Coordinate Vector]
+    The coordinate vector of \(\mathbf{v}\) relative to basis \(S = \{\mathbf{v}_1, \ldots, \mathbf{v}_n\}\) satisfies:
+    \[ \mathbf{v} = c_1\mathbf{v}_1 + \cdots + c_n\mathbf{v}_n \]
+    
+    Solve: \([\mathbf{v}_1 \ \mathbf{v}_2 \ \cdots \ \mathbf{v}_n][c] = [\mathbf{v}]\)
+\end{definitionbox}
+
+\begin{mathematicabox}
+    \begin{lstlisting}[language=Mathematica, basicstyle=\ttfamily\small]
+(* Find coordinate vector *)
+basis = {{1,0,0}, {2,2,0}, {3,3,3}};
+v = {2,-1,3};
+coeff = LinearSolve[Transpose[basis], v]
+
+(* For polynomials *)
+p1 = {1,1,0}; p2 = {1,0,1}; p3 = {0,1,1};
+p = {2,-1,1};
+coeff = LinearSolve[Transpose[{p1,p2,p3}], p]
+    \end{lstlisting}
+\end{mathematicabox}
+
+\subsection{Rank and Nullity}
+
+\begin{definitionbox}[Dimension Theorem]
+    \[ \rank(A) + \nullity(A) = n \]
+    
+    where \(n\) is the number of columns of \(A\).
+    
+    \begin{itemize}
+        \item \textbf{Rank:} number of linearly independent rows/columns
+        \item \textbf{Nullity:} dimension of null space = number of free variables
+    \end{itemize}
+\end{definitionbox}
+
+\begin{mathematicabox}
+    \begin{lstlisting}[language=Mathematica, basicstyle=\ttfamily\small]
+A = {{179, 676, 785, 771},
+     {428, 361, 283, 917},
+     {640, 512, 154, 303}};
+rank = MatrixRank[A];
+nullity = Dimensions[A][[2]] - rank;
+
+(* Basis for null space *)
+nullSpaceBasis = NullSpace[A];
+    \end{lstlisting}
+\end{mathematicabox}
+
+\subsection{Eigenvalues and Eigenvectors}
+
+\begin{definitionbox}[Eigenvalue Equation]
+    \[ A\mathbf{v} = \lambda\mathbf{v} \quad \text{where } \mathbf{v} \neq \mathbf{0} \]
+    
+    Characteristic polynomial: \(\det(A - \lambda I) = 0\)
+\end{definitionbox}
+
+\begin{formulabox}
+    \textbf{Properties:}
+    \begin{align*}
+    \text{Trace:} &\quad \tr(A) = \sum \lambda_i \\
+    \text{Determinant:} &\quad \det(A) = \prod \lambda_i \\
+    \text{Algebraic multiplicity:} &\quad \text{multiplicity as root of char poly} \\
+    \text{Geometric multiplicity:} &\quad \dim(\text{null space of } A - \lambda I)
+    \end{align*}
+\end{formulabox}
+
+\begin{mathematicabox}
+    \begin{lstlisting}[language=Mathematica, basicstyle=\ttfamily\small]
+A = {{4,0,1}, {2,3,2}, {1,0,4}};
+
+(* Characteristic polynomial *)
+charPoly = CharacteristicPolynomial[A, lam]
+
+(* Eigenvalues and eigenvectors *)
+eigenvalues = Eigenvalues[A]
+eigenvectors = Eigenvectors[A]
+{values, vectors} = Eigensystem[A]
+
+(* Eigenspace basis for specific lam *)
+lam = 3;
+eigenspace = NullSpace[A - lam*IdentityMatrix[3]]
+    \end{lstlisting}
+\end{mathematicabox}
+
+\subsection{Diagonalization}
+
+\begin{definitionbox}[Diagonalization]
+    A matrix \(A\) is diagonalizable if there exists invertible \(P\) such that:
+    \[ P^{-1}AP = D \]
+    
+    where \(D\) is diagonal with eigenvalues.
+    
+    \textbf{Condition:} geometric multiplicity = algebraic multiplicity for every eigenvalue.
+\end{definitionbox}
+
+\begin{mathematicabox}
+    \begin{lstlisting}[language=Mathematica, basicstyle=\ttfamily\small]
+(* Check diagonalizable *)
+{vals, vecs} = Eigensystem[A];
+isDiagonalizable = (MatrixRank[Transpose[vecs]] == Length[A])
+
+(* Construct P and D *)
+P = Transpose[vecs];
+Dmat = DiagonalMatrix[vals];
+
+(* Verify P^{-1}AP = D *)
+Simplify[Inverse[P] . A . P] == Dmat
+
+(* Cayley-Hamilton Theorem *)
+charPoly = CharacteristicPolynomial[A, lam];
+charPolyA = charPoly /. lam -> A;
+Simplify[charPolyA]  (* Should give zero matrix *)
+    \end{lstlisting}
+\end{mathematicabox}
+
+% ============================================================
+% MASTER FORMULA SHEET
+% ============================================================
+\section{Master Formula Sheet}
+
+\begin{center}
+    \begin{tabular}{|c|c|}
+        \hline
+        \multicolumn{2}{|c|}{\textbf{\color{primary} CALCULUS FORMULAS}} \\
+        \hline
+        Definite Integral & \(\int_a^b f(x)\,dx = F(b)-F(a)\) \\
+        Average Value & \(f_{\text{avg}} = \frac{1}{b-a}\int_a^b f(x)\,dx\) \\
+        Area Between Curves & \(\int_a^b |f(x)-g(x)|\,dx\) \\
+        Volume (Disk) & \(\pi\int_a^b [R(x)]^2\,dx\) \\
+        Volume (Shell) & \(2\pi\int_a^b x f(x)\,dx\) \\
+        Arc Length & \(\int_a^b \sqrt{1+[f'(x)]^2}\,dx\) \\
+        Surface Area & \(2\pi\int_a^b f(x)\sqrt{1+[f'(x)]^2}\,dx\) \\
+        \hline
+        \multicolumn{2}{|c|}{\textbf{\color{primary} LINEAR ALGEBRA FORMULAS}} \\
+        \hline
+        Distance: Point to Line & \(\frac{|(\mathbf{P-Q})\times\mathbf{v}|}{|\mathbf{v}|}\) \\
+        Distance: Point to Plane & \(\frac{|Ax_0+By_0+Cz_0+D|}{\sqrt{A^2+B^2+C^2}}\) \\
+        Angle Between Lines & \(\cos\theta = \frac{|\mathbf{v}_1\cdot\mathbf{v}_2|}{|\mathbf{v}_1||\mathbf{v}_2|}\) \\
+        Area of Triangle & \(\frac{1}{2}|\mathbf{AB}\times\mathbf{AC}|\) \\
+        Volume (Parallelepiped) & \(|\mathbf{a}\cdot(\mathbf{b}\times\mathbf{c})|\) \\
+        Rank-Nullity & \(\rank(A) + \nullity(A) = n\) \\
+        Characteristic Equation & \(\det(A-\lambda I)=0\) \\
+        Cayley-Hamilton & \(p(A)=0\) \\
+        Diagonalization & \(A = PDP^{-1}\) \\
+        \hline
+        \multicolumn{2}{|c|}{\textbf{\color{primary} MEANS FORMULAS}} \\
+        \hline
+        Arithmetic Mean & \(\frac{1}{n}\sum_{i=1}^n x_i\) \\
+        Geometric Mean & \((\prod_{i=1}^n x_i)^{1/n}\) \\
+        Harmonic Mean & \(\frac{n}{\sum_{i=1}^n 1/x_i}\) \\
+        \hline
+    \end{tabular}
+\end{center}
+
+% ============================================================
+% MATHEMATICA QUICK REFERENCE
+% ============================================================
+\section{Wolfram Mathematica 13 Quick Reference}
+
+\begin{center}
+    \begin{tabular}{|l|l|}
+        \hline
+        \textbf{Task} & \textbf{Command} \\
+        \hline
+        Define vector & \texttt{v = \{a,b,c\}} \\
+        Dot product & \texttt{v1 . v2} \\
+        Cross product & \texttt{Cross[v1, v2]} \\
+        Magnitude & \texttt{Norm[v]} \\
+        Unit vector & \texttt{v/Norm[v]} \\
+        Matrix multiplication & \texttt{A . B} \\
+        Determinant & \texttt{Det[A]} \\
+        Inverse & \texttt{Inverse[A]} \\
+        Transpose & \texttt{Transpose[A]} \\
+        Trace & \texttt{Tr[A]} \\
+        Rank & \texttt{MatrixRank[A]} \\
+        Null space & \texttt{NullSpace[A]} \\
+        Eigenvalues & \texttt{Eigenvalues[A]} \\
+        Eigenvectors & \texttt{Eigenvectors[A]} \\
+        Solve system & \texttt{LinearSolve[A, b]} \\
+        LU decomposition & \texttt{LUDecomposition[A]} \\
+        Definite integral & \texttt{Integrate[f[x], \{x,a,b\}]} \\
+        Numerical integral & \texttt{NIntegrate[f[x], \{x,a,b\}]} \\
+        Summation & \texttt{Sum[expr, \{i,imin,imax\}]} \\
+        Do loop & \texttt{Do[expr, \{i,imin,imax\}]} \\
+        For loop & \texttt{For[start, test, inc, body]} \\
+        Random numbers & \texttt{RandomInteger[\{min,max\}, n]} \\
+        \hline
+    \end{tabular}
+\end{center}
+
+% ============================================================
+% EXAM TIPS
+% ============================================================
+\section{Exam Tips \& Common Pitfalls}
+
+\begin{tipbox}
+    \textbf{General Tips:}
+    \begin{itemize}
+        \item Always check dimensions before matrix multiplication
+        \item For area between curves, identify which function is on top
+        \item When using Cramer's rule, ensure \(\det(A) \neq 0\)
+        \item For geometric means, all numbers must be positive
+        \item In free fall problems, remember \(g = 32\ \text{ft/s}^2\) or \(9.8\ \text{m/s}^2\)
+    \end{itemize}
+\end{tipbox}
+
+\begin{tipbox}
+    \textbf{Common Mistakes to Avoid:}
+    \begin{itemize}
+        \item Matrix multiplication uses \texttt{.} not \texttt{*}
+        \item Don't forget the \(2\pi\) in surface area formulas
+        \item For volume by shells, radius is distance to axis of revolution
+        \item In Descartes' rule, ignore zero coefficients when counting sign changes
+        \item Geometric multiplicity = dimension of eigenspace, not number of eigenvectors
+    \end{itemize}
+\end{tipbox}
+
+% ============================================================
+% END OF DOCUMENT
+% ============================================================
+\end{document}
