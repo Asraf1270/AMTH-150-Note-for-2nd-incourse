@@ -1,0 +1,853 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in, top=0.8in, bottom=0.8in}
+
+% Color and Graphics Packages
+\usepackage[table]{xcolor}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{tcolorbox}
+\usetikzlibrary{shapes,arrows,positioning,fit,backgrounds}
+
+% Mathematics Packages
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{mathtools}
+\usepackage{physics}
+\usepackage{bm}
+
+% Code and Listings
+\usepackage{listings}
+\usepackage{inconsolata}
+
+% Table and Layout
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{enumitem}
+
+% Header Footer
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+}
+
+% Custom Boxes
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable,listings}
+
+% ==================== COLOR DEFINITIONS ====================
+\definecolor{primary}{RGB}{25, 55, 95}
+\definecolor{secondary}{RGB}{70, 130, 200}
+\definecolor{accent}{RGB}{220, 70, 50}
+\definecolor{success}{RGB}{50, 150, 80}
+\definecolor{warning}{RGB}{200, 150, 30}
+\definecolor{info}{RGB}{30, 150, 180}
+\definecolor{codebg}{RGB}{245, 245, 245}
+\definecolor{comment}{RGB}{100, 100, 100}
+\definecolor{keyword}{RGB}{0, 0, 255}
+\definecolor{string}{RGB}{163, 21, 21}
+\definecolor{function}{RGB}{0, 134, 179}
+
+% ==================== STYLE DEFINITIONS ====================
+\lstset{
+    language=Mathematica,
+    backgroundcolor=\color{codebg},
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{keyword}\bfseries,
+    commentstyle=\color{comment}\itshape,
+    stringstyle=\color{string},
+    showstringspaces=false,
+    tabsize=2,
+    breaklines=true,
+    frame=single,
+    framerule=0.5pt,
+    rulecolor=\color{gray!30},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    numbersep=5pt,
+}
+
+% Custom TColorBoxes
+\newtcolorbox{mainbox}[2][]{
+    colback=white,
+    colframe=primary,
+    coltitle=white,
+    fonttitle=\bfseries\large,
+    title=#2,
+    sharp corners,
+    boxrule=1.5pt,
+    left=8pt,
+    right=8pt,
+    top=8pt,
+    bottom=8pt,
+    #1
+}
+
+\newtcolorbox{commandbox}[1][]{
+    colback=blue!5,
+    colframe=secondary,
+    sharp corners,
+    boxrule=1pt,
+    left=6pt,
+    right=6pt,
+    top=5pt,
+    bottom=5pt,
+    #1
+}
+
+\newtcolorbox{examplebox}[1][]{
+    colback=green!5,
+    colframe=success,
+    sharp corners,
+    boxrule=1pt,
+    left=6pt,
+    right=6pt,
+    top=5pt,
+    bottom=5pt,
+    #1
+}
+
+\newtcolorbox{warningbox}[1][]{
+    colback=yellow!5,
+    colframe=warning,
+    sharp corners,
+    boxrule=1pt,
+    left=6pt,
+    right=6pt,
+    top=5pt,
+    bottom=5pt,
+    #1
+}
+
+\newtcolorbox{tipbox}[1][]{
+    colback=cyan!5,
+    colframe=info,
+    sharp corners,
+    boxrule=1pt,
+    left=6pt,
+    right=6pt,
+    top=5pt,
+    bottom=5pt,
+    #1
+}
+
+% Section Formatting
+\usepackage{titlesec}
+\titleformat{\section}
+    {\color{primary}\normalfont\LARGE\bfseries}
+    {\color{primary}\thesection}{1em}{}
+\titleformat{\subsection}
+    {\color{secondary}\normalfont\Large\bfseries}
+    {\color{secondary}\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+    {\color{accent}\normalfont\large\bfseries}
+    {}{0em}{}
+
+% Page Style
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textcolor{primary}{\textbf{Mathematica Command Reference}}}
+\fancyhead[R]{\textcolor{primary}{\textbf{Complete Guide}}}
+\fancyfoot[C]{\thepage}
+\fancyfoot[R]{\textcolor{gray}{Version 1.0}}
+
+% Document
+\begin{document}
+
+% ==================== TITLE PAGE ====================
+\begin{titlepage}
+    \centering
+    \vspace*{1cm}
+    
+    {\Huge\bfseries\color{primary} Mathematica}\\[0.3cm]
+    {\Huge\bfseries\color{primary} Complete Command Reference}\\[0.5cm]
+    
+    \rule{0.7\textwidth}{1pt}\\[0.5cm]
+    
+    {\Large A Comprehensive Guide to Syntax, Examples, and Applications}\\[0.8cm]
+    
+    \begin{tikzpicture}[remember picture,overlay]
+        \node[opacity=0.05] at (current page.center) {
+            \begin{tikzpicture}
+                \draw[->,thick] (0,0) -- (2,0);
+                \draw[->,thick] (0,0) -- (0,2);
+                \node at (2.2,0) {x};
+                \node at (0,2.2) {y};
+                \draw[domain=0:1.5,smooth,variable=\x,thick] 
+                    plot ({\x}, {sin(deg(\x*2))*0.5});
+            \end{tikzpicture}
+        };
+    \end{tikzpicture}
+    
+    \vspace{1cm}
+    
+    \begin{mainbox}[width=0.8\textwidth, center]{Quick Navigation}
+        \begin{center}
+            \begin{tabular}{c c c}
+                \textbf{Lists \& Tables} & \textbf{Matrix Operations} & \textbf{Loops \& Control}\\
+                \textbf{Calculus} & \textbf{Linear Algebra} & \textbf{Graphics}\\
+                \textbf{Data Analysis} & \textbf{Strings} & \textbf{File I/O}
+            \end{tabular}
+        \end{center}
+    \end{mainbox}
+    
+    \vfill
+    
+    {\large Department of Applied Mathematics}\\
+    {\large University of Dhaka}\\
+    \vspace{0.5cm}
+    {\large \today}
+    
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+% ==================== SECTION 1: LISTS AND TABLES ====================
+\section{Lists and Tables}
+
+\subsection{Basic List Creation}
+
+\begin{commandbox}[Basic List Commands]
+\begin{lstlisting}
+{1, 2, 3, 4, 5}                    (* Simple list *)
+Range[10]                           (* {1,2,3,4,5,6,7,8,9,10} *)
+Range[0, 10, 2]                     (* {0,2,4,6,8,10} *)
+ConstantArray[0, 5]                 (* {0,0,0,0,0} *)
+\end{lstlisting}
+\end{commandbox}
+
+\subsection{Table Command - The Most Important}
+
+\begin{mainbox}{Table Command}
+\textbf{Syntax:} \texttt{Table[expression, \{iterator\}]}
+
+\textbf{When to use:} Creating lists, matrices, or any repeated structure. More efficient than loops.
+
+\begin{lstlisting}
+(* 1D Table *)
+Table[i^2, {i, 1, 5}]               (* {1,4,9,16,25} *)
+Table[2^i, {i, 0, 5}]               (* {1,2,4,8,16,32} *)
+Table[RandomInteger[10], {i, 1, 5}] (* Random list *)
+
+(* 2D Table (Matrix) *)
+Table[i*j, {i, 1, 3}, {j, 1, 3}]    
+(* {{1,2,3},{2,4,6},{3,6,9}} *)
+
+(* Table with condition *)
+Table[If[EvenQ[i], i, Nothing], {i, 1, 10}]
+(* {2,4,6,8,10} *)
+
+(* Table with step *)
+Table[i, {i, 0, 1, 0.1}]            (* {0,0.1,0.2,...,1} *)
+\end{lstlisting}
+\end{mainbox}
+
+\begin{examplebox}[Real Example: Sine Values]
+\begin{lstlisting}
+(* Create table of sine values *)
+sineTable = Table[{x, Sin[x]}, {x, 0, 2Pi, Pi/6}];
+TableForm[sineTable, TableHeadings -> {None, {"Angle", "Sin"}}]
+\end{lstlisting}
+\end{examplebox}
+
+\subsection{Grid and Display Commands}
+
+\begin{commandbox}[Display Commands]
+\begin{lstlisting}
+(* TableForm - displays as table *)
+TableForm[{{1,2,3},{4,5,6}}]
+
+(* MatrixForm - with brackets *)
+MatrixForm[{{1,2},{3,4}}]
+
+(* Grid - most flexible *)
+Grid[{{a,b,c},{d,e,f}}, Frame -> All]
+Grid[{{"Name","Age"},{"Alice",25},{"Bob",30}}, 
+     Dividers -> All]
+
+(* Column and Row *)
+Column[{a,b,c}]                     (* Vertical *)
+Row[{a,b,c}, " | "]                 (* Horizontal with separators *)
+\end{lstlisting}
+\end{commandbox}
+
+% ==================== SECTION 2: MATRIX OPERATIONS ====================
+\section{Matrix Operations}
+
+\subsection{Matrix Creation}
+
+\begin{mainbox}{Special Matrices}
+\begin{lstlisting}
+IdentityMatrix[4]                    (* 4x4 identity *)
+DiagonalMatrix[{1,2,3,4}]           (* Diagonal matrix *)
+ConstantArray[0, {3,4}]             (* 3x4 zero matrix *)
+RandomInteger[{-10,10}, {3,3}]      (* 3x3 random integers *)
+RandomReal[{0,1}, {4,4}]            (* 4x4 random reals *)
+\end{lstlisting}
+\end{mainbox}
+
+\subsection{Matrix Manipulation}
+
+\begin{commandbox}[Basic Operations]
+\begin{lstlisting}
+A = {{1,2,3},{4,5,6},{7,8,9}};
+B = {{9,8,7},{6,5,4},{3,2,1}};
+
+A + B                               (* Addition *)
+A - B                               (* Subtraction *)
+3 * A                               (* Scalar multiplication *)
+A . B                               (* Matrix multiplication (use DOT!) *)
+A * B                               (* Element-wise multiplication *)
+
+Transpose[A]                        (* Transpose *)
+Inverse[A]                          (* Inverse (if exists) *)
+Det[A]                              (* Determinant *)
+Tr[A]                               (* Trace *)
+MatrixRank[A]                       (* Rank *)
+\end{lstlisting}
+\end{commandbox}
+
+\begin{warningbox}[Important Note]
+Matrix multiplication uses \texttt{.} (dot), not \texttt{*} (star). The star performs element-wise multiplication!
+\end{warningbox}
+
+\subsection{Element Access and Submatrices}
+
+\begin{commandbox}[Indexing]
+\begin{lstlisting}
+A = Table[i*j, {i,4}, {j,4}];
+
+A[[2,3]]                            (* Element at row2, col3 *)
+A[[2]]                              (* Second row *)
+A[[All, 3]]                         (* Third column *)
+A[[2;;4, 2;;3]]                     (* Rows 2-4, cols 2-3 *)
+
+(* Submatrix extraction *)
+Take[A, {1,3}, {2,4}]               (* Rows 1-3, cols 2-4 *)
+Drop[A, {2}, {3}]                   (* Remove row2, col3 *)
+\end{lstlisting}
+\end{commandbox}
+
+% ==================== SECTION 3: LOOPS AND CONTROL ====================
+\section{Loops and Control Flow}
+
+\subsection{Do Loop}
+
+\begin{mainbox}{Do Loop}
+\textbf{Syntax:} \texttt{Do[expression, \{iterator\}]}
+
+\textbf{When to use:} When you want to repeat an operation without collecting results.
+
+\begin{lstlisting}
+(* Basic Do *)
+Do[Print[i], {i, 1, 5}]              (* Prints 1,2,3,4,5 *)
+
+(* Nested Do *)
+Do[
+  Do[Print[i, ",", j], {j, 1, 3}],
+  {i, 1, 3}
+]
+
+(* Accumulation *)
+sum = 0;
+Do[sum += i^2, {i, 1, 100}];
+Print[sum]                           (* Sum of squares *)
+\end{lstlisting}
+\end{mainbox}
+
+\subsection{For Loop}
+
+\begin{mainbox}{For Loop}
+\textbf{Syntax:} \texttt{For[start, test, increment, body]}
+
+\textbf{When to use:} Traditional loop when you need full control over initialization and increment.
+
+\begin{lstlisting}
+(* Basic For *)
+For[i = 1, i <= 5, i++,
+  Print[i]
+]
+
+(* For with step *)
+For[i = 1, i <= 10, i += 2,
+  Print[i]
+]
+
+(* For with break *)
+For[i = 1, i <= 100, i++,
+  If[i^2 > 1000, Break[]];
+  Print[i^2]
+]
+\end{lstlisting}
+\end{mainbox}
+
+\subsection{While Loop}
+
+\begin{mainbox}{While Loop}
+\textbf{Syntax:} \texttt{While[condition, body]}
+
+\textbf{When to use:} When the number of iterations is unknown.
+
+\begin{lstlisting}
+(* Newton's method example *)
+x = 1.0;
+While[Abs[x^2 - 2] > 0.0001,
+  x = (x + 2/x)/2;
+  Print[x]
+]
+
+(* Count digits *)
+n = 12345;
+count = 0;
+While[n > 0,
+  count++;
+  n = Floor[n/10]
+];
+Print["Number of digits: ", count]
+\end{lstlisting}
+\end{mainbox}
+
+\subsection{Conditional Statements}
+
+\begin{commandbox}[If, Which, Switch]
+\begin{lstlisting}
+(* If statement *)
+If[x > 0,
+  Print["Positive"],
+  Print["Negative or zero"]
+]
+
+(* Which - multiple conditions *)
+Which[
+  x < 0, "Negative",
+  x == 0, "Zero",
+  x > 0, "Positive"
+]
+
+(* Switch - pattern matching *)
+Switch[day,
+  "Mon", 1,
+  "Tue", 2,
+  "Wed", 3,
+  _, "Unknown"
+]
+\end{lstlisting}
+\end{commandbox}
+
+% ==================== SECTION 4: CALCULUS ====================
+\section{Calculus Commands}
+
+\subsection{Differentiation}
+
+\begin{mainbox}{D Command}
+\textbf{Syntax:} \texttt{D[f, x]} or \texttt{D[f, \{x, n\}]} for nth derivative
+
+\begin{lstlisting}
+(* Basic derivatives *)
+D[x^3, x]                           (* 3x^2 *)
+D[Sin[x], x]                        (* Cos[x] *)
+D[Log[x], x]                        (* 1/x *)
+D[Exp[a*x], x]                      (* a E^(a x) *)
+
+(* Higher order *)
+D[x^5, {x, 2}]                      (* 20x^3 *)
+
+(* Partial derivatives *)
+D[x^2*y^3, x]                       (* 2x y^3 *)
+D[x^2*y^3, y]                       (* 3x^2 y^2 *)
+
+(* Function form *)
+f[x_] := x^2;
+f'[x]                               (* 2x *)
+f''[x]                              (* 2 *)
+\end{lstlisting}
+\end{mainbox}
+
+\subsection{Integration}
+
+\begin{mainbox}{Integrate Command}
+\textbf{Syntax:} \texttt{Integrate[f, x]} (indefinite) or \texttt{Integrate[f, \{x,a,b\}]} (definite)
+
+\begin{lstlisting}
+(* Indefinite integrals *)
+Integrate[x^2, x]                   (* x^3/3 *)
+Integrate[Sin[x], x]                (* -Cos[x] *)
+Integrate[1/x, x]                   (* Log[x] *)
+
+(* Definite integrals *)
+Integrate[x^2, {x, 0, 3}]           (* 9 *)
+Integrate[Sin[x], {x, 0, Pi}]       (* 2 *)
+
+(* Multiple integrals *)
+Integrate[x*y, {x,0,1}, {y,0,1}]    (* 1/4 *)
+
+(* Improper integrals *)
+Integrate[1/x^2, {x, 1, Infinity}]  (* 1 *)
+Integrate[Exp[-x], {x,0,Infinity}]  (* 1 *)
+
+(* Numerical integration *)
+NIntegrate[Sin[x]/x, {x, 0, 1}]
+\end{lstlisting}
+\end{mainbox}
+
+\subsection{Limits and Series}
+
+\begin{commandbox}[Limits and Series]
+\begin{lstlisting}
+(* Limits *)
+Limit[Sin[x]/x, x -> 0]             (* 1 *)
+Limit[(1+1/n)^n, n -> Infinity]     (* E *)
+
+(* One-sided limits *)
+Limit[1/x, x -> 0, Direction -> "FromAbove"]  (* Infinity *)
+
+(* Series expansion *)
+Series[Sin[x], {x, 0, 5}]           (* Taylor series *)
+Normal[Series[Cos[x], {x,0,4}]]     (* Convert to polynomial *)
+\end{lstlisting}
+\end{commandbox}
+
+\subsection{Sums and Products}
+
+\begin{commandbox}[Sum and Product]
+\begin{lstlisting}
+(* Summation *)
+Sum[i^2, {i,1,10}]                  (* 385 *)
+Sum[1/2^i, {i,0,Infinity}]          (* 2 *)
+Sum[1/k^2, {k,1,Infinity}]          (* Pi^2/6 *)
+
+(* Double sum *)
+Sum[i*j, {i,1,3}, {j,1,3}]          (* 36 *)
+
+(* Product *)
+Product[i, {i,1,10}]                (* 3628800 = 10! *)
+\end{lstlisting}
+\end{commandbox}
+
+% ==================== SECTION 5: LINEAR ALGEBRA ====================
+\section{Linear Algebra}
+
+\subsection{Vector Operations}
+
+\begin{commandbox}[Vector Commands]
+\begin{lstlisting}
+v = {1, 2, 3};
+w = {4, 5, 6};
+
+v . w                               (* Dot product: 32 *)
+Cross[v, w]                         (* Cross product: {-3,6,-3} *)
+Norm[v]                             (* Magnitude: Sqrt[14] *)
+Normalize[v]                        (* Unit vector *)
+\end{lstlisting}
+\end{commandbox}
+
+\subsection{Eigenvalues and Eigenvectors}
+
+\begin{mainbox}{Eigensystem}
+\begin{lstlisting}
+A = {{4,0,1},{2,3,2},{1,0,4}};
+
+Eigenvalues[A]                      (* List of eigenvalues *)
+Eigenvectors[A]                     (* List of eigenvectors *)
+Eigensystem[A]                      (* Both {values, vectors} *)
+
+CharacteristicPolynomial[A, x]      (* Characteristic polynomial *)
+
+(* Eigenspace basis for specific eigenvalue *)
+λ = 3;
+NullSpace[A - λ*IdentityMatrix[3]]  (* Basis for eigenspace *)
+\end{lstlisting}
+\end{mainbox}
+
+\subsection{Solving Linear Systems}
+
+\begin{mainbox}{LinearSolve}
+\begin{lstlisting}
+A = {{1,1,2},{2,4,-3},{3,6,-5}};
+b = {9,1,0};
+
+(* Solve Ax = b *)
+x = LinearSolve[A, b]               (* {3, -1, 2} *)
+
+(* Using inverse *)
+x = Inverse[A] . b
+
+(* Cramer's Rule *)
+detA = Det[A];
+x1 = Det[ReplacePart[A, 1 -> b]]/detA;
+
+(* Row reduction *)
+augmented = Join[A, Transpose[{b}], 2];
+RowReduce[augmented]
+\end{lstlisting}
+\end{mainbox}
+
+\subsection{Rank and Null Space}
+
+\begin{commandbox}[Rank and Nullity]
+\begin{lstlisting}
+MatrixRank[A]                       (* Rank of matrix *)
+NullSpace[A]                        (* Basis for null space *)
+
+(* Dimension Theorem: rank + nullity = number of columns *)
+rank = MatrixRank[A];
+nullity = Length[NullSpace[A]];
+n = Dimensions[A][[2]];
+rank + nullity == n                  (* True *)
+\end{lstlisting}
+\end{commandbox}
+
+% ==================== SECTION 6: GRAPHICS ====================
+\section{Graphics and Visualization}
+
+\subsection{2D Plotting}
+
+\begin{mainbox}{Plot Command}
+\begin{lstlisting}
+(* Basic plot *)
+Plot[Sin[x], {x, 0, 2Pi}]
+
+(* Multiple functions *)
+Plot[{Sin[x], Cos[x]}, {x, 0, 2Pi},
+  PlotLegends -> {"Sin", "Cos"}]
+
+(* With styling *)
+Plot[x^2, {x, -2, 2},
+  PlotStyle -> {Red, Thick},
+  AxesLabel -> {"x", "y"},
+  PlotLabel -> "Parabola",
+  GridLines -> Automatic,
+  PlotRange -> {-1, 5}]
+
+(* List plot *)
+data = Table[{x, Sin[x]}, {x, 0, 2Pi, 0.1}];
+ListPlot[data, Joined -> True]
+\end{lstlisting}
+\end{mainbox}
+
+\subsection{Parametric and Polar Plots}
+
+\begin{commandbox}[Special Plots]
+\begin{lstlisting}
+(* Parametric plot *)
+ParametricPlot[{Cos[t], Sin[t]}, {t, 0, 2Pi}]
+
+(* Polar plot *)
+PolarPlot[1 + Cos[θ], {θ, 0, 2Pi}]
+
+(* Contour plot *)
+ContourPlot[x^2 + y^2, {x,-2,2}, {y,-2,2}]
+\end{lstlisting}
+\end{commandbox}
+
+\subsection{3D Plotting}
+
+\begin{commandbox}[3D Graphics]
+\begin{lstlisting}
+(* 3D surface *)
+Plot3D[Sin[x]*Cos[y], {x,-2,2}, {y,-2,2}]
+
+(* Parametric 3D curve *)
+ParametricPlot3D[{Cos[t], Sin[t], t}, {t,0,4Pi}]
+
+(* 3D with styling *)
+Plot3D[x^2 - y^2, {x,-2,2}, {y,-2,2},
+  ColorFunction -> "TemperatureMap",
+  Mesh -> None,
+  AxesLabel -> {"x","y","z"}]
+\end{lstlisting}
+\end{commandbox}
+
+% ==================== SECTION 7: DATA ANALYSIS ====================
+\section{Data Analysis}
+
+\subsection{Statistical Functions}
+
+\begin{commandbox}[Basic Statistics]
+\begin{lstlisting}
+data = {1,2,3,4,5,6,7,8,9,10};
+
+Mean[data]                          (* Average: 5.5 *)
+Median[data]                        (* Middle: 5.5 *)
+Variance[data]                      (* Sample variance *)
+StandardDeviation[data]             (* Standard deviation *)
+Total[data]                         (* Sum: 55 *)
+Min[data]                           (* Minimum: 1 *)
+Max[data]                           (* Maximum: 10 *)
+
+(* Descriptive statistics *)
+Quantile[data, 0.25]                (* First quartile *)
+\end{lstlisting}
+\end{commandbox}
+
+\subsection{Random Data Generation}
+
+\begin{commandbox}[Random Data]
+\begin{lstlisting}
+(* Random integers *)
+RandomInteger[10, 10]               (* 10 integers 0-10 *)
+RandomInteger[{-10,10}, {4,4}]      (* 4x4 random matrix *)
+
+(* Random reals *)
+RandomReal[1, 5]                    (* 5 reals between 0-1 *)
+RandomReal[{-1,1}, {3,3}]           (* 3x3 random matrix *)
+
+(* Random choice *)
+RandomChoice[{a,b,c,d}, 10]         (* 10 random picks *)
+
+(* Random permutation *)
+RandomSample[Range[10]]             (* Random ordering *)
+\end{lstlisting}
+\end{commandbox}
+
+% ==================== SECTION 8: STRINGS ====================
+\section{String Operations}
+
+\begin{commandbox}[String Commands]
+\begin{lstlisting}
+s = "Hello World";
+
+StringLength[s]                     (* 11 *)
+StringJoin["Hello", " ", "World"]   (* "Hello World" *)
+StringSplit[s]                      (* {"Hello","World"} *)
+StringReplace[s, "World" -> "Mathematica"]
+ToString[123.45]                    (* "123.45" *)
+ToExpression["1 + 2 * 3"]           (* 7 *)
+
+(* String formatting *)
+StringForm["x = ``, y = ``", x, y]
+\end{lstlisting}
+\end{commandbox}
+
+% ==================== SECTION 9: FILE OPERATIONS ====================
+\section{File and System Operations}
+
+\begin{commandbox}[File I/O]
+\begin{lstlisting}
+(* Working directory *)
+Directory[]
+SetDirectory["C:\\Data"]
+
+(* File operations *)
+FileNames[]                         (* List files *)
+Import["data.csv"]                  (* Import data *)
+Export["output.txt", data]          (* Export data *)
+
+(* User input *)
+name = Input["Enter your name: "]
+x = Input["Enter a number: "]
+
+(* Printing *)
+Print["The value is ", x]
+\end{lstlisting}
+\end{commandbox}
+
+% ==================== SECTION 10: UTILITY COMMANDS ====================
+\section{Utility Commands}
+
+\begin{commandbox}[Help and Information]
+\begin{lstlisting}
+?Sin                                (* Help for Sin *)
+??Sin                               (* Detailed help *)
+Names["Plot*"]                      (* All Plot functions *)
+\end{lstlisting}
+\end{commandbox}
+
+\begin{commandbox}[Timing and Memory]
+\begin{lstlisting}
+Timing[Sum[i^2, {i,1,10000}]]       (* CPU time *)
+AbsoluteTiming[expr]                (* Wall clock time *)
+MemoryInUse[]                       (* Memory used *)
+Clear[x, y, z]                      (* Clear variables *)
+ClearAll["Global`*"]                (* Clear all variables *)
+\end{lstlisting}
+\end{commandbox}
+
+\begin{commandbox}[System Information]
+\begin{lstlisting}
+$Version                           (* Mathematica version *)
+$OperatingSystem                   (* OS info *)
+$ProcessorCount                    (* Number of cores *)
+Date[]                             (* Current date *)
+TimeUsed[]                         (* CPU time used *)
+\end{lstlisting}
+\end{commandbox}
+
+% ==================== SECTION 11: QUICK REFERENCE CARD ====================
+\section{Quick Reference Card}
+
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+\multicolumn{2}{|c|}{\textbf{\color{primary} MOST USED COMMANDS}} \\
+\hline
+\textbf{Category} & \textbf{Commands} \\
+\hline
+Lists & \texttt{Range, Table, List, Join, Append} \\
+Matrix & \texttt{MatrixForm, Transpose, Inverse, Det} \\
+Loops & \texttt{Do, For, While, Table} \\
+Math & \texttt{Sin, Cos, Exp, Log, Sqrt, Abs} \\
+Calculus & \texttt{D, Integrate, Limit, Series, Sum} \\
+Linear Algebra & \texttt{LinearSolve, Eigenvalues, NullSpace, Rank} \\
+Graphics & \texttt{Plot, Plot3D, ParametricPlot, ListPlot} \\
+Statistics & \texttt{Mean, Median, Variance, RandomInteger} \\
+Conditionals & \texttt{If, Which, Switch} \\
+Utility & \texttt{Print, Clear, Timing, ?} \\
+\hline
+\end{tabular}
+\end{center}
+
+% ==================== SECTION 12: COMMON PATTERNS ====================
+\section{Common Programming Patterns}
+
+\begin{commandbox}[Functional Programming]
+\begin{lstlisting}
+(* Map - apply function to each element *)
+Map[f, list]                        (* {f[1], f[2], ...} *)
+f /@ list                           (* Same as Map *)
+
+(* Apply - use function on whole list *)
+Apply[Plus, list]                   (* Sum all elements *)
+Plus @@ list                        (* Same as Apply *)
+
+(* Select - filter list *)
+Select[list, EvenQ]                 (* Keep even numbers *)
+
+(* Fold - accumulate left to right *)
+Fold[f, init, list]                 (* f[f[f[init,x1],x2],...] *)
+
+(* Nest - apply repeatedly *)
+Nest[f, x, n]                       (* f[f[...[x]...]] n times *)
+\end{lstlisting}
+\end{commandbox}
+
+\begin{tipbox}[Performance Tips]
+\begin{itemize}
+    \item Use \texttt{Table} instead of \texttt{Do} + \texttt{AppendTo} for list building
+    \item Use \texttt{Total} instead of \texttt{Sum} for large lists
+    \item Use \texttt{Map} instead of \texttt{For} loops for element-wise operations
+    \item Use \texttt{LinearSolve} instead of \texttt{Inverse} for solving systems
+    \item Use \texttt{NIntegrate} for numerical integration of complicated functions
+\end{itemize}
+\end{tipbox}
+
+\begin{warningbox}[Common Mistakes]
+\begin{itemize}
+    \item Matrix multiplication: use \texttt{.} not \texttt{*}
+    \item Indexing starts at 1, not 0
+    \item \texttt{==} for equality, \texttt{=} for assignment
+    \item \texttt{;} suppresses output, no semicolon prints result
+    \item Functions use square brackets: \texttt{f[x]}, not \texttt{f(x)}
+\end{itemize}
+\end{warningbox}
+
+% ==================== END OF DOCUMENT ====================
+\end{document}
